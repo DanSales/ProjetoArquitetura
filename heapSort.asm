@@ -1,4 +1,5 @@
 .data
+	File: .asciiz "heapSort.txt"
 	Vetor: .word  14, 51, 2, 141, 24, 12
 	primeiraparte: .asciiz "Indice: "
 	segundaparte: .asciiz " que possui valor: "
@@ -8,7 +9,7 @@
 	space: .asciiz " "
 .text
 	la $a0, Vetor
-	addi $a1, $zero, 6
+	addi $a1, $zero, 6 
 	jal heapsort
 	j printVetor
 	j exit
@@ -33,6 +34,27 @@ saidaprimeirofor:
 	#A3 ficara com o tamanho do vetor
 	add $a3, $a1, $zero
 	ford: blt  $t1, $zero, saidasegundofor
+	ble $t1, $zero, saidaprinttroca
+	#Funcao para printar a pilha
+	addi $sp, $sp, -12
+	#Salvando a1, a2 e ra na pilha
+	sw $a1, 0($sp)
+	sw $a2, 4($sp)
+	sw $ra, 8($sp)
+	#a1 = 0
+	add $a1, $zero, $zero
+	#a2 = ultimo valor disponivel
+	add $a2, $t1, $zero
+	#a3 vetor[0]
+	lw $a3,0($a0)
+	jal printTroca
+	#restaurando valores
+	lw $a1, 0($sp)
+	lw $a2, 4($sp)
+	lw $ra, 8($sp)
+	#desalocando
+	addi $sp, $sp, 12
+	saidaprinttroca:
 	#Troca v[0] com v[i]
 	lw $t2, 0($a0)
 	sll $t3, $t1, 2
@@ -88,6 +110,24 @@ saidaifum:
 	add $t5, $t7, $zero
 saidaifdois:
 	beq $t5, $a2, return
+	#Funcao para printar a pilha
+	addi $sp, $sp, -8
+	#Salvando a1, a2 e ra na pilha
+	sw $a1, 0($sp)
+	sw $ra, 4($sp)
+	#a1 = j
+	add $a1, $t5, $zero
+	#a2 ja e j + 1
+	#a3 a[maior]
+	sll $a3, $t5, 2
+	add $a3, $a0, $a3
+	lw $a3, 0($a3)
+	jal printTroca
+	#restaurando valores
+	lw $a1, 0($sp)
+	lw $ra, 4($sp)
+	#desalocando
+	addi $sp, $sp, 8
 	#$t8 = endereco de vetor[i]
 	sll $t8, $a2, 2
 	add $t8, $a0, $t8
@@ -104,6 +144,44 @@ return:
 	lw $a2, 0($sp)
 	lw $ra, 4($sp)
 	addi $sp, $sp, 8
+	jr $ra
+	
+printTroca:
+	addi $sp, $sp, -4
+	sw $a0, 0($sp)
+	la $a0, primeiraparte
+	addi $v0, $zero, 4
+	syscall
+	add $a0, $a1, $zero
+	addi $v0, $zero, 1
+	syscall
+	la $a0, segundaparte
+	addi $v0, $zero, 4
+	syscall
+	add $a0, $a3, $zero
+	addi $v0, $zero, 1
+	syscall
+	la $a0, terceiraparte
+	addi $v0, $zero, 4
+	syscall
+	add $a0, $a2, $zero
+	addi $v0, $zero, 1
+	syscall
+	la $a0, quartaparte
+	addi $v0, $zero, 4
+	syscall
+	lw $a0, 0($sp)
+	sll $t8, $a2, 2
+	add $t8, $t8, $a0
+	lw $t8, 0($t8)
+	add $a0, $t8, $zero
+	addi $v0, $zero, 1
+	syscall
+	la $a0, quebralinha
+	addi $v0, $zero, 4
+	syscall
+	lw $a0, 0($sp)
+	addi $sp, $sp, 4
 	jr $ra
 	
 printVetor:
