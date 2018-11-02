@@ -24,7 +24,7 @@ insertion:
 	
 	addi $a1,$a1,-1
 	jal insertion
-	# $t1 = enderenço de memoria de vetor[tamanho - 1]
+	# $t1 = enderenÃ§o de memoria de vetor[tamanho - 1]
 	sll $t1, $a1, 2
 	add $t1, $a0, $t1
 	# $t1 = ultimo
@@ -131,4 +131,6 @@ printVetor:
 	syscall
 	j for
 	lw $a0, 0($t1)
+
 exit: nop
+
