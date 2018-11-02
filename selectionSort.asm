@@ -15,6 +15,7 @@
 	addi $a1, $zero, 5
 	j printArray
 	
+	
 
 
 	
@@ -60,8 +61,8 @@ if:
 
 	add $t9, $s6, $zero #temp = min
 	add $s6, $s7, $zero #min = j
-	addi $t0, $t0, 1
-
+	#addi $t0, $t0, 1
+	j printTroca	
 swap:
 	########SWAP#########
 	sw $s6, 0($s1) 
@@ -72,42 +73,41 @@ swap:
 	j selection
 	
 printTroca:
-	addi $sp, $sp, -4
+	addi $sp, $sp, -8
 	sw $a0, 0($sp)
+	sw $v0, 4($sp)
 	la $a0, primeiraparte
 	addi $v0, $zero, 4
 	syscall
-	add $a0, $a1, $zero
+	addi $a0, $t0, -1
 	addi $v0, $zero, 1
 	syscall
 	la $a0, segundaparte
 	addi $v0, $zero, 4
 	syscall
-	add $a0, $a3, $zero
+	add $a0, $s6, $zero
 	addi $v0, $zero, 1
 	syscall
 	la $a0, terceiraparte
 	addi $v0, $zero, 4
 	syscall
-	add $a0, $a2, $zero
+	add $a0, $s3, $zero
 	addi $v0, $zero, 1
 	syscall
 	la $a0, quartaparte
 	addi $v0, $zero, 4
 	syscall
-	lw $a0, 0($sp)
-	sll $t8, $a2, 2
-	add $t8, $t8, $a0
-	lw $t8, 0($t8)
-	add $a0, $t8, $zero
+	add $a0, $t9, $zero
 	addi $v0, $zero, 1
 	syscall
 	la $a0, quebralinha
 	addi $v0, $zero, 4
 	syscall
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
-	jr $ra	
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
+
+	j swap	
 	
 
 	
